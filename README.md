@@ -7,12 +7,12 @@ Building and installing
 ----
 Download/clone the repository:
 ```
-$ git clone git@github.com:matteojug/lda-sta.git
-$ cd lda-sta
+git clone git@github.com:matteojug/lda-sta.git
+cd lda-sta
 ```
 then build it:
 ```
-$ python setup.py build
+python setup.py build
 ```
 and install it (optionally with `--user` to install only for the user):
 ```
