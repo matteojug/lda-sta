@@ -1,9 +1,9 @@
 lda-sta
 ====
 
-Implementation of the algorithm of the paper [A Reduction for Efficient LDA Topic Reconstruction](https://papers.nips.cc/paper/8012-a-reduction-for-efficient-lda-topic-reconstruction).
+Implementation of the algorithm in [A Reduction for Efficient LDA Topic Reconstruction](https://papers.nips.cc/paper/8012-a-reduction-for-efficient-lda-topic-reconstruction).
 
-This project was supported by the ERC DMAP project (680153). 
+This project was supported by the [ERC DMAP project (680153)](https://sites.google.com/a/di.uniroma1.it/dmap/). 
 
 Building and installing
 ----
