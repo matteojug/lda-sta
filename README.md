@@ -7,7 +7,7 @@ Building and installing
 ----
 Download/clone the repository:
 ```
-git clone git@github.com:matteojug/lda-sta.git
+git clone https://github.com/matteojug/lda-sta.git
 cd lda-sta
 ```
 then build it:
