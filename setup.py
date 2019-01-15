@@ -5,7 +5,7 @@ module1 = Extension('lda_sta',
                             # ('DEBUG', '1'),
                             # ('DEBUG_TIME', '1'),
                         ],
-                    extra_compile_args = ["-Wno-sign-compare"],
+                    extra_compile_args = ["-Wno-sign-compare",'-std=c++11'],
                     sources = ['lda_sta.cpp'])
 
 setup (name = 'lda_sta',
