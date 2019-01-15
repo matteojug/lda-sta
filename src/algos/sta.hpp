@@ -114,7 +114,7 @@ class STABasedAlgo : virtual public Algo {
     // Populates the NgramsVec with ngrams up to size ngramCount, normalizing the distributions
     void getNgrams(NgramsVec &ngrams, int ngramSize){
         int ngramMode;
-        auto mode = getParamString(PARAM_TAG_NGRAM_MODE, PARAM_NGRAM_MODE_PREFIX);
+        auto mode = getParamString(PARAM_TAG_NGRAM_MODE, PARAM_NGRAM_MODE_ALL);
         if (mode == PARAM_NGRAM_MODE_PREFIX){
             ngramMode = ngramModePrefix;
             ngarmSampleCount = 1;
@@ -172,7 +172,9 @@ class STABasedAlgo : virtual public Algo {
 
         debl("# Getting STA");
         timer.reset();
-        lda2sta(staNgrams, ldaNgrams, inputData->K, inputData->alpha);
+        if (hasParam(PARAM_TAG_SKIP_REDUCTION))
+            debl("\tSkipping reduction");
+        lda2sta(staNgrams, ldaNgrams, inputData->K, inputData->alpha, true, hasParam(PARAM_TAG_SKIP_REDUCTION));
         timer.printTime("lda2sta");
 
         timer.reset();
@@ -181,8 +183,8 @@ class STABasedAlgo : virtual public Algo {
             for (auto &kv : staNgrams[i]){
                 staPrenormalizationSum[i] += kv.second * kv.first.multiplicity;
             }
+            debl("[?] S_"<<i<<" sum = "<<staPrenormalizationSum[i]);
             // for (auto &kv : staNgrams[i]) kv.second /= staPrenormalizationSum[i];
-            debl("[?] S_"<<i<<" pre normalization sum = "<<staPrenormalizationSum[i]);
         }
         timer.printTime("normalization");
         if (inputData->algId == ALGO_STA_DUMP) dumpNgrams(staNgrams, staDumpPath);

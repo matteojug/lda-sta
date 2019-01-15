@@ -169,7 +169,7 @@ class Anchor : virtual public STABasedAlgo {
         eps = getParamReal(PARAM_TAG_EPS, 0);
         p = getParamReal(PARAM_TAG_P, 0);
         thresholdDist = getParamReal(PARAM_TAG_THRESHOLD_DIST, -1);
-        distanceFunctionStr = getParamString(PARAM_TAG_DISTANCE, PARAM_DISTANCE_TAU);
+        distanceFunctionStr = getParamString(PARAM_TAG_DISTANCE, PARAM_DISTANCE_TAUD);
         candidateSize = getParamInt(PARAM_TAG_CANDIDATE_SIZE, -1);
 
         if (distanceFunctionStr == PARAM_DISTANCE_TAU) distanceFunction = dfTau;

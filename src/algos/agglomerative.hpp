@@ -152,7 +152,7 @@ class AnchorFastAgglomerativeCluster : public AnchorAgglomerativeCluster, Anchor
                 }
                 key.updateMultiplicity();
                 ldaNgrams[key.size][key] = cnt / ngramCounts[key.size];
-                lda2staSingleAdd(staNgrams, key, ldaNgrams[key.size][key], inputData->K, inputData->alpha, true);                
+                lda2staSingleAdd(staNgrams, key, ldaNgrams[key.size][key], inputData->K, inputData->alpha, true, hasParam(PARAM_TAG_SKIP_REDUCTION));                
             }
         }
         return AnchorAgglomerativeCluster::getAnchors(candidatesAnchor);

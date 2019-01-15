@@ -52,7 +52,7 @@ class AnchorFast : virtual public Anchor {
         }
         key.updateMultiplicity();
         ldaNgrams[key.size][key] = cnt / ngramCounts[key.size];
-        lda2staSingleAdd(staNgrams, key, ldaNgrams[key.size][key], inputData->K, inputData->alpha);
+        lda2staSingleAdd(staNgrams, key, ldaNgrams[key.size][key], inputData->K, inputData->alpha, false, hasParam(PARAM_TAG_SKIP_REDUCTION));
     }
 
     void getTopics(vector<Ngram> anchors){
@@ -79,7 +79,7 @@ class AnchorFast : virtual public Anchor {
         }
         for (auto &kv : newCnts){
             ldaNgrams[kv.first.size][kv.first] = kv.second / ngramCounts[kv.first.size];
-            lda2staSingleAdd(staNgrams, kv.first, ldaNgrams[kv.first.size][kv.first], inputData->K, inputData->alpha);
+            lda2staSingleAdd(staNgrams, kv.first, ldaNgrams[kv.first.size][kv.first], inputData->K, inputData->alpha, false, hasParam(PARAM_TAG_SKIP_REDUCTION));
         }
         return Anchor::getTopics(anchors);
     }
@@ -114,7 +114,8 @@ class AnchorFast : virtual public Anchor {
             delete m;
             return eq;
         };
-        lda2sta(staNgrams, ldaNgrams, inputData->K, inputData->alpha, true, rhoFilter);
+        lda2sta(staNgrams, ldaNgrams, inputData->K, inputData->alpha, true, hasParam(PARAM_TAG_SKIP_REDUCTION), rhoFilter);
+
         timer.printTime("Rho - lda2sta");
 
         vector<pair<Ngram, Real>> candidateAnchors;

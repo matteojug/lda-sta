@@ -5,6 +5,7 @@ using namespace std;
 
 #define _fail(e) { cerr<<__FILE__":"<<__LINE__<<" @ "<<e<<endl; \
                         return NULL; }
+#define PyBaseString_Check(x) (PyObject_TypeCheck((x), &PyBaseString_Type))
 
 extern "C" {
 
@@ -35,9 +36,10 @@ static PyObject* anchor(PyObject *self, PyObject *args){
         dictPos = 0;
         int docLen = 0;
         while (PyDict_Next(doc, &dictPos, &dictKey, &dictValue)){
-            int tokenId = PyInt_AsLong(dictKey),
-                    tokenCount = PyInt_AsLong(dictValue);
-            if (PyErr_Occurred()) _fail("Wrong data type in corpus");
+            int tokenId = PyInt_AsLong(dictKey);
+            if (PyErr_Occurred()) _fail("Wrong data type in corpus, expected int key in item of document "<<i);
+            int tokenCount = PyInt_AsLong(dictValue);
+            if (PyErr_Occurred()) _fail("Wrong data type in corpus, expected int value in item of document "<<i);
             inputData->corpus[i].push_back(make_pair(tokenId, tokenCount));
             inputData->vocabSize = max(inputData->vocabSize, tokenId+1);
             docLen += tokenCount;
@@ -50,8 +52,9 @@ static PyObject* anchor(PyObject *self, PyObject *args){
         len = PySequence_Size(vocab);
         for (int i = 0; i < len; i++) {
             auto item = PySequence_GetItem(vocab, i);
+            if (!PyBaseString_Check(item))
+                _fail("Wrong data type in vocab, expected string");
             char *s = PyString_AsString(item);
-            if (PyErr_Occurred()) _fail("Wrong data type in vocab"); 
             inputData->vocab.push_back(s);
         }
         inputData->vocabSize = inputData->vocab.size();
@@ -60,10 +63,10 @@ static PyObject* anchor(PyObject *self, PyObject *args){
     if (algParams){
         dictPos = 0;
         while (PyDict_Next(algParams, &dictPos, &dictKey, &dictValue)){
-            string sk = PyString_AsString(dictKey);
-            if (PyErr_Occurred()) _fail("Wrong data type in algParams"); 
-            string sv = PyString_AsString(dictValue);
-            if (PyErr_Occurred()) _fail("Wrong data type in algParams"); 
+            if (!(PyBaseString_Check(dictKey) && PyBaseString_Check(dictValue)))
+                _fail("Wrong data type in algParams, expected string key/value");
+            string sk = PyString_AsString(dictKey),
+                    sv = PyString_AsString(dictValue);
             inputData->params[sk] = sv;
         }
     }

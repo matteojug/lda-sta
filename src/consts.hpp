@@ -21,6 +21,7 @@
 #define PARAM_TAG_RANDOM_SEED "random_seed"
 #define PARAM_TAG_FORCE_GENERIC "force_generic"
 #define PARAM_TAG_STADUMP_PATH "stadump_path"
+#define PARAM_TAG_SKIP_REDUCTION "skip_reduction"
 
 // How to pick ngrams from the doc to estimade LDA distribution
 #define PARAM_TAG_NGRAM_MODE "ngram"

@@ -2,8 +2,11 @@
 #include "definitions.hpp"
 #include "utils.hpp"
 
-void lda2staSingleAdd(NgramsVec &sta, const Ngram &ldaNgram, Real ngramCount, int k, Real alpha, bool insertIfZero = false){
-
+void lda2staSingleAdd(NgramsVec &sta, const Ngram &ldaNgram, Real ngramProb, int k, Real alpha, bool insertIfZero = false, bool skipReduction = false){
+    if (skipReduction){
+        sta[ldaNgram.size][ldaNgram] = ngramProb;
+        return;
+    }
     Real ka = alpha * k, l = ldaNgram.size;
     Real partitionsSum = 0;
     
@@ -25,12 +28,12 @@ void lda2staSingleAdd(NgramsVec &sta, const Ngram &ldaNgram, Real ngramCount, in
 
     Real dCoeff = gamma(ka + l) / (gamma(ka + 1) * gamma(l));
     Real minusCoeff = 1. / (ka * gamma(l));
-    Real prob = clamp<Real>(dCoeff * ngramCount - minusCoeff * partitionsSum, 0, 1);
+    Real prob = clamp<Real>(dCoeff * ngramProb - minusCoeff * partitionsSum, 0, 1);
     if (prob < EPS && !insertIfZero) return;
     
     sta[l][ldaNgram] = prob;
 }
-void lda2sta(NgramsVec &sta, const NgramsVec &lda, int k, Real alpha, bool initSTA, function<bool(const Ngram&)> &ngramFilter){
+void lda2sta(NgramsVec &sta, const NgramsVec &lda, int k, Real alpha, bool initSTA, bool skipReduction, function<bool(const Ngram&)> &ngramFilter){
     if (initSTA){
         sta.clear();
         sta.resize(lda.size());
@@ -39,11 +42,11 @@ void lda2sta(NgramsVec &sta, const NgramsVec &lda, int k, Real alpha, bool initS
     for (int l = 2; l < lda.size(); l++){
         for (auto &ngram : lda[l]){
             if (!ngramFilter(ngram.first)) continue;
-            lda2staSingleAdd(sta, ngram.first, ngram.second, k, alpha);
+            lda2staSingleAdd(sta, ngram.first, ngram.second, k, alpha, false, skipReduction);
         }
     }
 }
-void lda2sta(NgramsVec &sta, const NgramsVec &lda, int k, Real alpha, bool initSTA = true){
+void lda2sta(NgramsVec &sta, const NgramsVec &lda, int k, Real alpha, bool initSTA = true, bool skipReduction = false){
     function<bool(const Ngram&)> filter = [](const Ngram &x){ return true; };
-    lda2sta(sta, lda, k, alpha, initSTA, filter);
+    lda2sta(sta, lda, k, alpha, initSTA, skipReduction, filter);
 }
