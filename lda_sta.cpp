@@ -1,6 +1,4 @@
 #include <Python.h>
-#include <bits/stdc++.h>
-
 #include "src/anchor.cpp"
 
 using namespace std;
