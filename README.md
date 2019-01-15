@@ -1,4 +1,4 @@
-sta-lda
+lda-sta
 ====
 
 Implementation of the algorithm of the paper [A Reduction for Efficient LDA Topic Reconstruction](https://papers.nips.cc/paper/8012-a-reduction-for-efficient-lda-topic-reconstruction).
