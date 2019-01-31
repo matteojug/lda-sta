@@ -44,6 +44,7 @@ static PyObject* anchor(PyObject *self, PyObject *args){
             inputData->vocabSize = max(inputData->vocabSize, tokenId+1);
             docLen += tokenCount;
         }
+        Py_DECREF(doc);
         inputData->maxDocLen = max(inputData->maxDocLen, docLen);
         sort(inputData->corpus[i].begin(), inputData->corpus[i].end());
     }
@@ -55,6 +56,7 @@ static PyObject* anchor(PyObject *self, PyObject *args){
             if (!PyBaseString_Check(item))
                 _fail("Wrong data type in vocab, expected string");
             char *s = PyString_AsString(item);
+            Py_DECREF(item);
             inputData->vocab.push_back(s);
         }
         inputData->vocabSize = inputData->vocab.size();

@@ -67,7 +67,8 @@ class Anchor : virtual public STABasedAlgo {
 
     virtual void getCandidatesAnchor(vector<pair<Ngram, Real>> &candidatesAnchor){
         for (auto &kv : staNgrams[inputData->c])
-            candidatesAnchor.push_back(make_pair(kv.first, rho(kv.first)));
+            if (ldaNgrams[kv.first.size][kv.first] >= p/(2*inputData->K))
+                candidatesAnchor.push_back(make_pair(kv.first, rho(kv.first)));
         
         sort(candidatesAnchor.begin(), candidatesAnchor.end(), [](pair<Ngram, Real> a, pair<Ngram, Real> b){
             return a.second > b.second;
